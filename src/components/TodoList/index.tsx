@@ -73,14 +73,20 @@ const TodoList = () => {
             <Message variant='danger'>This note is already added</Message>
           )}
           <ListGroup className='todolistList'>
-            {todoList.map((listItem: any) => (
+            {todoList.map((listItem: any, index) => (
               <ListGroup.Item
                 variant={listItem.complete ? "success" : "primary"}
                 key={listItem.name}
               >
                 <Row>
                   <Col xs={8} sm={8}>
-                    - {listItem.name} : {moment(listItem.dateSelected).format('MMMM Do YYYY, h:mm:ss a')}
+                  <Form.Check
+                    type="checkbox"
+                    id={`${index}`}
+                    label={`${listItem.name} : ${moment(listItem.dateSelected).format('MMMM Do YYYY, h:mm:ss a')}`}
+                    className='checkbox-list'
+                  />
+                    
                   </Col>
                   <Col xs={2} sm={2}>
                     <Button

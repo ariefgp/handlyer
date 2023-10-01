@@ -13,3 +13,7 @@
 .todolistList::-webkit-scrollbar {
   display: none;
 }
+
+.checkbox-list input[type=checkbox]:checked + label  {
+  text-decoration: line-through;
+}
