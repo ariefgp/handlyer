@@ -8,20 +8,28 @@ import {
 import Message from "../Message";
 import "./styles.scss";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
+
+type ValuePiece = Date | null | undefined;
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const TodoList = () => {
   const dispatch = useAppDispatch();
   const [list, setList] = useState<string>("");
+  const [dateSelected, setDateSelected] = useState<ValuePiece>(new Date());
 
   const data = useAppSelector((state: RootState) => state.todoList);
   const { todoList, repeat } = data;
 
   const submitHandler = (e: any) => {
     e.preventDefault();
-    dispatch(listAdd({ name: list, complete: false }));
+    dispatch(listAdd({ name: list, complete: false, dateSelected: dateSelected?.toString() }));
     setList("");
+    setDateSelected(new Date());
   };
-
+  
   const handleDelete = (item: any) => {
     dispatch(listRemove(item));
   };
@@ -35,7 +43,7 @@ const TodoList = () => {
       <Form className='mx-2 my-2' onSubmit={submitHandler}>
         <Form.Group controlId='inputList'>
           <Row>
-            <Col xs={9} sm={8}>
+            <Col xs={4} sm={5}>
               <Form.Control
                 type='text'
                 value={list}
@@ -44,7 +52,16 @@ const TodoList = () => {
                 required
               />
             </Col>
-            <Col xs={3} sm={4}>
+            <Col xs={4} sm={5}>
+              <DatePicker 
+                showTimeSelect
+                selected={dateSelected} 
+                onChange={(date) => setDateSelected(date)}
+                dateFormat="yyyy/MM/dd" 
+                className="form-control"
+              />
+            </Col>
+            <Col xs={2} sm={2}>
               <Button type='submit'>Add</Button>
             </Col>
           </Row>
@@ -63,7 +80,7 @@ const TodoList = () => {
               >
                 <Row>
                   <Col xs={8} sm={8}>
-                    - {listItem.name}
+                    - {listItem.name} : {moment(listItem.dateSelected).format('MMMM Do YYYY, h:mm:ss a')}
                   </Col>
                   <Col xs={2} sm={2}>
                     <Button
